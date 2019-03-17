@@ -1,4 +1,5 @@
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -59,6 +60,22 @@ public class DefaultControllerTest {
         SampleHandler handler = new SampleHandler();
         // tje following call should throw an RuntimeException
         controller.addHandler(request, handler);
+    }
+
+    @Test(timeout = 50)
+    @Ignore(value="Ignore for now until a decent time-out value is determined")
+    public void testProcessMultipleRequestTimeout() {
+        // request, handler1 created by initialize()
+        Response response = new SampleResponse();
+
+        for (int i = 0; i < 99999; i++) {
+            request = new SampleRequest(String.valueOf(i));
+            controller.addHandler(request, handler1);
+            response = controller.processRequest(request);
+            assertNotNull(response);
+            assertNotSame(ErrorResponse.class, response.getClass());
+        }
+
     }
 
 
